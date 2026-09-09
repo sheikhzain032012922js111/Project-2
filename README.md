@@ -31,7 +31,7 @@ The app loads a dataset of houses (size in sqft, price in $k) and lets you explo
 1. Install dependencies:
 
    pip install streamlit matplotlib scikit-learn pandas
-   
+
 2. Run the app:
 
    python -m streamlit run app.py
@@ -41,3 +41,7 @@ The app loads a dataset of houses (size in sqft, price in $k) and lets you explo
 ## Dataset
 
 A small hardcoded set of 12 houses (size in sqft, price in $k), defined in `modules/data_utils.py`. Editing that file's `load_house_data()` function changes the data used across every tab.
+
+## Live Demo
+
+https://aiconceptslab.streamlit.app/
