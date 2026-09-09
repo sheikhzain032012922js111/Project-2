@@ -1,7 +1,5 @@
 import streamlit as st
 import matplotlib.pyplot as plt
-import numpy as np
-
 from modules.data_utils import load_house_data
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.cluster import KMeans
@@ -18,7 +16,30 @@ with st.sidebar:
     st.metric("Average size", f"{df['size_sqft'].mean():.0f} sqft")
     st.metric("Average price", f"{df['price_k'].mean():.0f}k")
 
-tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Classification", "Clustering", "Decision Tree"])
+tab0, tab1, tab2, tab3, tab4 = st.tabs(["Home", "Regression", "Classification", "Clustering", "Decision Tree"])
+
+with tab0:
+    st.subheader("Welcome to AI Concepts Lab")
+    st.write(
+        "This app walks through four core machine learning ideas, all using the same "
+        "small dataset of house sizes and prices shown in the sidebar."
+    )
+
+    st.markdown("**What each tab shows:**")
+    st.markdown(
+        """
+        - **Regression** — fits a line predicting house price from size, and shows
+          how much price changes per square foot.
+        - **Classification** — labels houses as "cheap" or "expensive" based on a
+          threshold you set, and trains a model to predict that label.
+        - **Clustering** — groups houses into similar clusters based on size and
+          price, without being told the labels in advance.
+        - **Decision Tree** — builds a tree of yes/no questions to classify houses
+          as cheap or expensive, and lets you see the tree itself.
+        """
+    )
+
+    st.info("Use the sidebar to see the raw dataset and its averages at any point.")
 
 with tab1:
     st.subheader("Size vs Price")
@@ -26,11 +47,9 @@ with tab1:
     ax.scatter(df["size_sqft"], df["price_k"])
     ax.set_xlabel("Size (sqft)")
     ax.set_ylabel("Price (k)")
-    ax.set_title("House Size vs Price")
     st.pyplot(fig)
 
     st.subheader("Regression Line")
-
     X = df["size_sqft"].values.reshape(-1, 1)
     y = df["price_k"].values
 
@@ -52,11 +71,9 @@ with tab1:
 
 with tab2:
     st.subheader("Classification: Cheap vs Expensive")
-
     threshold = st.slider("Expensive threshold (price in k)", 70, 160, 110)
 
     df["is_expensive"] = (df["price_k"] > threshold).astype(int)
-
     X_class = df["size_sqft"].values.reshape(-1, 1)
     y_class = df["is_expensive"].values
 
@@ -77,11 +94,9 @@ with tab2:
 
 with tab3:
     st.subheader("Clustering: Grouping Similar Houses")
-
     n_clusters = st.slider("Number of clusters", 2, 4, 2)
 
     X_cluster = df[["size_sqft", "price_k"]].values
-
     kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
     df["cluster"] = kmeans.fit_predict(X_cluster)
 
@@ -98,7 +113,6 @@ with tab3:
 
 with tab4:
     st.subheader("Decision Tree: Cheap vs Expensive")
-
     max_depth = st.slider("Max tree depth", 1, 4, 2)
 
     tree_clf = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
